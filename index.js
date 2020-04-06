@@ -8,13 +8,15 @@ require('dotenv').config()
 app.use(cors());
 app.use(bodyParser.json());
 
+//Ohidul Islam 
+
 const uri = process.env.DB_PATH;
 let client = new MongoClient(uri, { useNewUrlParser: true });
 
 app.get('/products', (req, res) => {
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("redOnionOnlineStore").collection("products");
+        const collection = client.db("doctorsPortalDB").collection("products");
         collection.find().toArray((err, documents) => {
             if(err){
                 console.log(err)
@@ -32,7 +34,7 @@ app.get('/product/:key', (req, res) => {
     const key = req.params.key;
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("redOnionOnlineStore").collection("products");
+        const collection = client.db("doctorsPortalDB").collection("products");
         collection.find({key}).toArray((err, documents) => {
             if(err){
                 console.log(err)
@@ -51,7 +53,7 @@ app.post('/getProductByKey', (req, res) => {
     const productKeys = req.body;
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("redOnionOnlineStore").collection("products");
+        const collection = client.db("doctorsPortalDB").collection("products");
         collection.find({key: {$in: productKeys}}).toArray((err, documents) => {
             if(err){
                 console.log(err)
@@ -70,7 +72,7 @@ app.post('/addProduct', (req, res) => {
     const product = req.body;
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("redOnionOnlineStore").collection("products");
+        const collection = client.db("doctorsPortalDB").collection("products");
         collection.insert(product, (err, result) => {
             if(err){
                 console.log(err)
@@ -90,7 +92,7 @@ app.post('/placeOrder', (req, res) => {
     console.log(orderDetails);
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
-        const collection = client.db("redOnionOnlineStore").collection("orders");
+        const collection = client.db("doctorsPortalDB").collection("orders");
         collection.insertOne(orderDetails, (err, result) => {
             if(err){
                 console.log(err)
@@ -104,5 +106,5 @@ app.post('/placeOrder', (req, res) => {
     });
 })
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4200;
 app.listen(port, () => console.log('Listing to port 4000'));
