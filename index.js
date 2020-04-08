@@ -11,14 +11,6 @@ app.use(bodyParser.json());
 const uri = process.env.DB_PATH;
 let client = new MongoClient(uri, { useNewUrlParser: true });
 
-if (process.env.NODE_ENV === 'production') {
-	app.use(express.static('client/build'));
-}
-
-app.get('*', (request, response) => {
-	response.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-});
-
 app.get('/allAppointmentInformation', (req, res) => {
     client = new MongoClient(uri, { useNewUrlParser: true });
     client.connect(err => {
@@ -49,7 +41,7 @@ app.post('/appointmentInformation', (req, res) => {
                 res.status(500).send({message: err});
             }
             else{
-                res.send(result)
+                res.send(result.ops[0])
             }
         });
         client.close();
